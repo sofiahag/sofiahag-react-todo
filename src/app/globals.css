@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Sofia Pro';
+  src: local('Sofia Pro'), url('./assets/sofiapro-light.otf') format('opentype');
+  font-display: fallback;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+main {
+  background: linear-gradient(#eafcf1, #dff9fb, #e5e7ff, #fbdff8, #fbe0e4, #fefae9);
+}
+
+html, body {
+	height: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#home {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	padding: 8px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+input,
+textarea {
+  padding: 10px;
+}
+
+form button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 14px;
+}
+
+ul {
+  list-style: none;
+  text-align: center;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  border-radius: 5px 2px;
+  margin: 8px 0;
+}
+
+li div {
+  position: relative;
+}
+
+li div button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: 0;
+  padding: 14px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+li div button:hover,
+li div button:focus {
+  box-shadow: 0 0 1px black;
+}
+
+li h2 {
+  margin: 0;
+  padding: 4px;
+}
+
+li p {
+  margin: 8px;
+}
+
