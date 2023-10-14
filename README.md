@@ -3,3 +3,5 @@
 Simple task app built with Next and Tailwind CSS. More to come!
 
 Favicon created by Pixel perfect, Flaticon.
+
+https://sofiahag-next-todo.netlify.app/
