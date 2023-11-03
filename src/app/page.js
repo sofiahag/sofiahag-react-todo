@@ -5,9 +5,12 @@ import React, { useState } from "react";
 import NewTask from "./components/NewTask";
 import TasksList from "./components/TasksList";
 
+//Todo: add Postgres db
 
 export default function Home() {
+
   const [newTask, setNewTask] = useState({});
+
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setNewTask((prev) => ({ ...prev, id: Date.now(), [name]: value }));
