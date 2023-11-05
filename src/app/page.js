@@ -1,11 +1,14 @@
 'use client'
 
 import Image from 'next/image'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { db } from "./firebase.js";
+import { collection, query, orderBy, onSnapshot, serverTimestamp, doc, addDoc, deleteDoc } from "firebase/firestore";
 import NewTask from "./components/NewTask";
 import TasksList from "./components/TasksList";
 
-//Todo: add Postgres db
+
+const Q = query(collection(db, 'todos'), orderBy('timestamp', 'desc'));
 
 export default function Home() {
 
@@ -20,14 +23,30 @@ export default function Home() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!newTask.title) return;
+    addDoc(collection(db, 'todos'), {
+      title: newTask.title,
+      description: newTask.description,
+      timestamp: serverTimestamp()
+    })
     setAllTasks((prev) => [newTask, ...prev]);
     setNewTask({});
   };
   const handleDelete = (taskIdToRemove) => {
     setAllTasks((prev) => prev.filter(
-      (task) => task.id !== taskIdToRemove
+      (task) => task.id !== taskIdToRemove,
     ));
   };
+
+  useEffect(() => {
+    onSnapshot(Q, (snapshot) => {
+      setAllTasks(snapshot.docs.map(doc => ({
+          id: doc.id,
+          title: doc.data()['title'],
+          description: doc.data()['description'],
+          timestamp: doc.data()['timestamp']
+      })))
+    })
+  },[allTasks]);
 
   return (
     <main className="flex min-h-screen flex-col items-center">
