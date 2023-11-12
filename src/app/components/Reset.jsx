@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { auth, sendPasswordResetEmail } from '../firebase';
+
 function Reset() {
+
     const [email, setEmail] = useState('');
     const [user, loading, error] = useAuthState(auth);
-    const navigate = useNavigate();
+
+    const router = useRouter();
+
     useEffect(() => {
         if (loading) return;
-        if (user) navigate('/dashboard');
-    }, [user, loading, navigate]);
+        if (user) router.replace('/dashboard');
+    }, [user, loading, router]);
+
     return (
         <div className='w-full flex flex-row justify-center h-25 align-middle mb-20 bg-yellow-50'>
             <div className='p-7'>
@@ -21,13 +26,15 @@ function Reset() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder='E-mail address'
                 />
+                <Link href="/reset">
                 <button
                     className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-pink-100 via-violet-100 to-pink-100 ml-5 mr-20'
                     onClick={() => sendPasswordResetEmail(auth, email)}
                 >
                 Send password reset email
                 </button>
-                <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-100 ml-10'><Link to='/register'>Register</Link></button>
+                </Link>
+                <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-100 ml-10'><Link href='/register'>Register</Link></button>
             </div>
         </div>
     );
