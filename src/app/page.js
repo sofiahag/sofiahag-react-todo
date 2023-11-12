@@ -2,8 +2,13 @@
 
 import Image from 'next/image'
 import React, { useState, useEffect } from "react";
-import { db } from "./firebase.js";
-import { collection, query, orderBy, onSnapshot, serverTimestamp, doc, addDoc, deleteDoc } from "firebase/firestore";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { db, getAuth } from "./firebase.js";
+import { collection, query, orderBy, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
+import Login from "./components/Login.jsx";
+import Register from "./components/Register.jsx";
+import Reset from "./components/Reset.jsx";
+import Dashboard from "./components/Dashboard.jsx";
 import NewTask from "./components/NewTask";
 import TasksList from "./components/TasksList";
 
@@ -23,7 +28,9 @@ export default function Home() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!newTask.title) return;
+    let user = getAuth().currentUser;
     addDoc(collection(db, 'todos'), {
+      user: user.uid,
       title: newTask.title,
       description: newTask.description,
       timestamp: serverTimestamp()
@@ -36,21 +43,32 @@ export default function Home() {
       (task) => task.id !== taskIdToRemove,
     ));
   };
-
   useEffect(() => {
     onSnapshot(Q, (snapshot) => {
-      setAllTasks(snapshot.docs.map(doc => ({
+      let user = getAuth().currentUser;
+      if (user) {
+        setAllTasks(snapshot.docs.map(doc => ({
+          user: user.uid,
           id: doc.id,
           title: doc.data()['title'],
           description: doc.data()['description'],
           timestamp: doc.data()['timestamp']
-      })))
+        })))
+      }
     })
   },[allTasks]);
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <h1 className="text-3xl my-6 py-5">TASKS</h1>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/reset" element={<Reset />} />
+          <Route exact path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </Router>
+      <h1 className="text-3xl py-5">TASKS</h1>
       <div className="max-w-2xl lg:w:1/2 md:w-2/3 max-sm:w-64 items-center text-sm">
       <NewTask
         newTask={newTask}

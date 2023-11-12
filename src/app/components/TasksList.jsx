@@ -5,7 +5,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 export default function TasksList({ allTasks, handleDelete }) {
   return (
     <ul>
-      {allTasks.map(({ id, title, description }) => (
+      {allTasks.map(({ id, user, title, description }) => (
         <li className="bg-yellow-100 border-2 border-gray-300 text-base mb-4" key={id}>
           <div className="bg-yellow-200">
             <h2 className="text-lg break-all px-3 py-3 mr-4">{title}</h2>
