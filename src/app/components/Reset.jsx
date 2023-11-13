@@ -17,7 +17,8 @@ function Reset() {
     }, [user, loading, router]);
 
     return (
-        <div className='w-full flex flex-row justify-center h-25 align-middle mb-20 bg-yellow-50'>
+        <div className='w-full flex flex-row justify-center max-sm:flex-column max-sm:flex-wrap
+                h-25 align-middle mb-20 bg-yellow-50'>
             <div className='p-7'>
                 <input
                     type='text'
@@ -28,13 +29,15 @@ function Reset() {
                 />
                 <Link href="/reset">
                 <button
-                    className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-pink-100 via-violet-100 to-pink-100 ml-5 mr-20'
+                    className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-pink-100
+                        via-violet-100 to-pink-100 ml-5 mr-20 max-sm:mx-3 max-sm:mt-3'
                     onClick={() => sendPasswordResetEmail(auth, email)}
                 >
                 Send password reset email
                 </button>
                 </Link>
-                <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-100 ml-10'><Link href='/register'>Register</Link></button>
+                <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-blue-100
+                    via-cyan-100 to-blue-100 ml-10 max-sm:mx-3'><Link href='/register'>Register</Link></button>
             </div>
         </div>
     );

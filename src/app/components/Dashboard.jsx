@@ -30,12 +30,14 @@ function Dashboard() {
     }, [user, loading, router]);
 
     return (
-        <div className='w-full flex flex-row justify-center items-center h-25 p-7 mb-20 bg-yellow-50'>
+        <div className='w-full flex max-sm:flex-column justify-center max-sm:flex-column max-sm:flex-wrap
+            items-center h-25 p-7 mb-20 bg-yellow-50'>
                 Logged in as:
                 <div className='text-gray-700 ml-2'>{name},</div>
                 <div className='text-gray-500 ml-2'>{user?.email}</div>
                 <Link href="/dashboard">
-                <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-pink-100 via-violet-100 to-pink-100 ml-10' onClick={logout}>
+                <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-pink-100
+                    via-violet-100 to-pink-100 ml-10 max-sm:mx-0 max-sm:mt-2' onClick={logout}>
                     Logout
                 </button>
             </Link>

@@ -27,43 +27,47 @@ function Register() {
     
 
     return (
-    <div className='w-full flex flex-row justify-center h-25 align-middle mb-20 bg-yellow-50'>
+    <div className='w-full flex flex-row justify-center max-sm:flex-column max-sm:flex-wrap
+            h-25 align-middle mb-20 bg-yellow-50'>
         <div className='p-7'>
             <input
                 type='text'
-                className='p-3 text-xs border-gray-300 border-2 w-52 mr-2'
+                className='p-3 text-xs border-gray-300 border-2 w-52 mr-2 max-sm:mt-2 max-sm:ml-1 max-sm:w-36'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder='Full name'
             />
             <input
                 type='text'
-                className='p-3 text-xs border-gray-300 border-2 w-52 mr-2'
+                className='p-3 text-xs border-gray-300 border-2 w-52 mr-2 max-sm:mt-2 max-sm:ml-1 max-sm:w-36'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder='E-mail address'
             />
             <input
                 type='password'
-                className='p-3 text-xs border-gray-300 border-2 w-52'
+                className='p-3 text-xs border-gray-300 border-2 w-52 max-sm:mt-2 max-sm:ml-1 max-sm:w-36'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder='Password'
             />
             <Link href="/register">
-            <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-pink-100 via-violet-100 to-pink-100 ml-5 mr-20' onClick={register}>
+            <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-pink-100
+                via-violet-100 to-pink-100 ml-5 mr-20 max-sm:mx-3' onClick={register}>
                 Register
             </button>
             </Link>
             <Link href="/register">
             <button
-                className='rounded-full bg-gradient-to-r from-violet-100 via-blue-100 to-violet-100 p-3 ml-20 mr-20 text-xs'
+                className='rounded-full bg-gradient-to-r from-violet-100 via-blue-100 to-violet-100
+                    p-3 ml-20 mr-20 text-xs md:mt-3 max-sm:mx-3 max-sm:mt-3'
                 onClick={signInWithGoogle}
             >
             Register with Google
             </button>
             </Link>
-            <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-100 ml-10'><Link href='/'>Log in</Link></button>
+            <button className='p-3 text-xs border-0 text-black rounded-full bg-gradient-to-r from-blue-100
+                via-cyan-100 to-blue-100 ml-10 max-sm:mx-3'><Link href='/'>Log in</Link></button>
         </div>
     </div>
     );
