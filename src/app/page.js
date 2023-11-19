@@ -84,7 +84,7 @@ export default function Home() {
         <div className="container mx-auto flex justify-normal items-center">
           <button onClick={toggleReg} className="text-pink-100">Register</button>
           {reg ? <Register toggle={toggleReg} /> : null}
-          <button onClick={toggleLog} className="text-purple-100 ml-24">Login</button>
+          <button onClick={toggleLog} className="text-purple-100 ml-24 max-sm:ml-3">Login</button>
           {log ? <Login toggle={toggleLog} /> : null}
           <div className="ml-auto">
             <button onClick={handleLogout} className="text-sky-100">Logout</button>

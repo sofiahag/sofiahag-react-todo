@@ -22,7 +22,7 @@ const Login = (props) => {
         <div className="popup max-sm:text-xs">
             <div className="popup-inner">
                 <Container>
-                    <Form className="ml-auto" onSubmit={handleLogin}>
+                    <Form className="ml-auto">
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                         <FormGroup>
                             <Input
@@ -42,7 +42,8 @@ const Login = (props) => {
                             />
                         </FormGroup>
                     </Form>
-                    <button onClick={props.toggle} className="bg-sky-200 rounded-full px-4 py-2 
+                    <Button className="bg-pink-200 rounded-full px-4 py-2 text-black" onClick={handleLogin}>Log in</Button>
+                    <button onClick={props.toggle} className="ml-3 bg-sky-200 rounded-full px-4 py-2 
                         text-black max-sm:mt-1 max-sm:-ml-1">Close</button>
                 </Container>
             </div>
