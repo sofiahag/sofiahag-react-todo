@@ -28,6 +28,7 @@ export default function Home() {
     event.preventDefault();
     if (!newTask.title) return;
     addDoc(collection(db, 'todos'), {
+      user: user.uid,
       title: newTask.title,
       description: newTask.description,
       timestamp: serverTimestamp()
