@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase.js";
 import { Container, Form, FormGroup, Input, Button } from "reactstrap";
 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase.js";
+
 const Login = (props) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
     const handleLogin = async (event) => {
@@ -23,16 +24,18 @@ const Login = (props) => {
             <div className="popup-inner">
                 <Container>
                     <Form className="ml-auto">
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                    {error && <p style={{ color: "red" }}>{error}</p>}
                         <FormGroup>
+                            <label htmlFor="login-email">E-mail</label>
                             <Input
                                 type="email"
                                 value={email}
                                 onChange={(event) => setEmail(event.target.value)}
-                                placeholder="Email"
+                                placeholder="E-mail"
                             />
                         </FormGroup>
                         <FormGroup>
+                            <label htmlFor="login-password">Password</label>
                             <Input
                                 type="password"
                                 name="password"
@@ -42,7 +45,7 @@ const Login = (props) => {
                             />
                         </FormGroup>
                     </Form>
-                    <Button className="bg-pink-200 rounded-full px-4 py-2 text-black" onClick={handleLogin}>Log in</Button>
+                    <Button type="button" className="bg-pink-200 rounded-full px-4 py-2 text-black" onClick={handleLogin}>Log in</Button>
                     <button onClick={props.toggle} className="ml-3 bg-sky-200 rounded-full px-4 py-2 
                         text-black max-sm:mt-1 max-sm:-ml-1">Close</button>
                 </Container>
