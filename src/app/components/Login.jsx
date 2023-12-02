@@ -15,6 +15,16 @@ const Login = (props) => {
             await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
             setError(error.message);
+            console.error("Firebase Authentication Error:", error.code, error.message);
+            if (error.code === "auth/invalid-email" || error.code === "auth/user-not-found") {
+                alert("Invalid email. Please check your email and try again.");
+            } else if (error.code === "auth/wrong-password") {
+                alert("Incorrect password. Please try again.");
+            } else if (error.code === "auth/invalid-login-credentials") {
+                alert("Incorrect email or password. Have you registered?");
+            } else {
+                alert("An error occurred during sign-in. Please try again.");
+            }
         }
         props.toggle();
     };

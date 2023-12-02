@@ -18,19 +18,19 @@ const Register = ({ newTask, setAllTasks, toggle }) => {
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, passwordOne);
                 const user = res.user;
+                setAllTasks([]);
                 await addDoc(collection(db, "users"), {
                     uid: user.uid,
                     authProvider: "local",
                     email,
                 });
-                setAllTasks((prevTasks) => [...prevTasks, newTask]);
             } catch (error) {
                 setError(error.message);
                 console.error(error);
             }
         } else {
             setError("The passwords do not match");
-        }
+        }       
         toggle();
     };
 

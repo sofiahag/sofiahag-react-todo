@@ -28,13 +28,15 @@ export default function Home() {
     if (user) {
       try {
         const snapshot = await onSnapshot(Q);
-        if (snapshot) {
-          setAllTasks(snapshot.docs.map(doc => ({
-            id: doc.id,
-            title: doc.data()?.title,
-            description: doc.data()?.description,
-            timestamp: doc.data()?.timestamp
-          })));
+        if (snapshot && snapshot.docs) {
+          setAllTasks(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              title: doc.data()?.title,
+              description: doc.data()?.description,
+              timestamp: doc.data()?.timestamp,
+            }))
+          );
         }
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -48,21 +50,30 @@ export default function Home() {
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
     if (!newTask.title || !user) return;
-    addDoc(collection(db, 'todos'), {
-      user: user.uid,
-      title: newTask.title,
-      description: newTask.description,
-      timestamp: serverTimestamp()
-    });
-    setAllTasks((prev) => [newTask, ...prev]);
-    setNewTask({});
+    try {
+      const docRef = await addDoc(collection(db, 'todos'), {
+        user: user.uid,
+        title: newTask.title,
+        description: newTask.description,
+        timestamp: serverTimestamp()
+      });
+      const newTaskData = { id: docRef.id, ...newTask };
+      setAllTasks((prev) => [newTaskData, ...prev]);
+      setNewTask({});
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   };
 
   const handleDelete = (taskIdToRemove) => {
-    setAllTasks((prev) => prev.filter(
-      (task) => task.id !== taskIdToRemove,
-    ));
+    setAllTasks((prev) => {
+      //console.log('Deleting task with id:', taskIdToRemove);
+      const updatedTasks = prev.filter((task) => task.id !== taskIdToRemove);
+      //console.log('Updated tasks:', updatedTasks);
+      return updatedTasks;
+    });
   };
 
   const handleLogout = () => {            
@@ -87,10 +98,10 @@ export default function Home() {
         setUser(authUser);
         fetchTasks(authUser);
         const uid = authUser.uid;
-        console.log("uid", uid);
+        //console.log("uid", uid);
       } else {
         setUser(null);
-        console.log("User is logged out");
+        //console.log("User is logged out");
       }
     });
     return () => unsubscribe();
@@ -115,9 +126,9 @@ export default function Home() {
           user={user}
           newTask={newTask}
           handleChange={handleChange}
-          handleSubmit={handleSubmit}
+          handleSubmit={(event) => handleSubmit(event)}
         />
-        <TasksList allTasks={allTasks} handleDelete={handleDelete} />
+        {user && allTasks.length > 0 && <TasksList allTasks={allTasks} handleDelete={handleDelete} />}
       </div>
     </main>
   );
