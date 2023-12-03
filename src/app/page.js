@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, query, orderBy, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
+import { collection, query, orderBy, serverTimestamp, addDoc, where, getDocs } from "firebase/firestore";
 
 import NewTask from "./components/NewTask";
 import TasksList from "./components/TasksList";
@@ -26,23 +26,13 @@ export default function Home() {
 
   const fetchTasks = async (user) => {
     if (user) {
-      try {
-        const snapshot = await onSnapshot(Q);
-        if (snapshot && snapshot.docs) {
-          setAllTasks(
-            snapshot.docs.map((doc) => ({
-              id: doc.id,
-              title: doc.data()?.title,
-              description: doc.data()?.description,
-              timestamp: doc.data()?.timestamp,
-            }))
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
+      const uid = user.uid;
+      const tasksQuery = query(collection(db, "todos"), where("user", "==", uid));
+      const querySnapshot = await getDocs(tasksQuery);
+      const tasks = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setAllTasks(tasks);
     }
-  };
+  };  
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -52,9 +42,10 @@ export default function Home() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!newTask.title || !user) return;
+    const uid = user.uid;
     try {
       const docRef = await addDoc(collection(db, 'todos'), {
-        user: user.uid,
+        user: uid,
         title: newTask.title,
         description: newTask.description,
         timestamp: serverTimestamp()
