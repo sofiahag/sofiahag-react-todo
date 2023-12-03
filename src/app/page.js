@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 
 import { db, auth } from "./firebase.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { collection, query, orderBy, serverTimestamp, addDoc, where, getDocs } from "firebase/firestore";
 
 import NewTask from "./components/NewTask";
@@ -22,7 +22,9 @@ export default function Home() {
   const [newTask, setNewTask] = useState({});
   const [reg, setReg] = useState(false);
   const [log, setLog] = useState(false);
+  const [gog, setGog] = useState(false);
   const [allTasks, setAllTasks] = useState([]);
+
 
   const fetchTasks = async (user) => {
     if (user) {
@@ -67,6 +69,28 @@ export default function Home() {
     });
   };
 
+  const provider = new GoogleAuthProvider();
+  const handleGogLogin = async (event) => {
+    event.preventDefault();
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const q = query(collection(db, "users"), where("uid", "==", user.uid));
+        const docs = await getDocs(q);
+        if (docs.docs.length === 0) {
+          await addDoc(collection(db, "users"), {
+              uid: user.uid,
+              name: 'Name Will Appear',
+              authProvider: "google",
+              email: user.email,
+          });
+      }
+        //console.log("Google sign-in successful", user);
+    } catch (error) {
+        console.error("Google sign-in error", error);
+    }
+};
+
   const handleLogout = () => {            
     signOut(auth).then(() => {
       alert("Logged out successfully!");
@@ -106,6 +130,7 @@ export default function Home() {
           {reg ? <Register newTask={newTask} setAllTasks={setAllTasks} toggle={toggleReg} /> : null}
           <button onClick={toggleLog} className="text-purple-100 ml-24 max-sm:ml-3">Login</button>
           {log ? <Login toggle={toggleLog} /> : null}
+          <button onClick={handleGogLogin} className="text-purple-100 ml-24 max-sm:ml-3">Login with Google</button>
           <div className="ml-auto">
             <button onClick={handleLogout} className="text-sky-100">Logout</button>
           </div>
