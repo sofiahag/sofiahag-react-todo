@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { collection, query, orderBy, serverTimestamp, addDoc, where, getDocs } from "firebase/firestore";
+import { collection, query, orderBy, serverTimestamp, addDoc, where, getDocs, doc, deleteDoc } from "firebase/firestore";
 
 import NewTask from "./components/NewTask";
 import TasksList from "./components/TasksList";
@@ -22,7 +22,6 @@ export default function Home() {
   const [newTask, setNewTask] = useState({});
   const [reg, setReg] = useState(false);
   const [log, setLog] = useState(false);
-  const [gog, setGog] = useState(false);
   const [allTasks, setAllTasks] = useState([]);
 
 
@@ -60,14 +59,18 @@ export default function Home() {
     }
   };
 
-  const handleDelete = (taskIdToRemove) => {
-    setAllTasks((prev) => {
-      //console.log('Deleting task with id:', taskIdToRemove);
-      const updatedTasks = prev.filter((task) => task.id !== taskIdToRemove);
-      //console.log('Updated tasks:', updatedTasks);
-      return updatedTasks;
-    });
-  };
+  const handleDelete = async (taskIdToRemove) => {
+    console.log("Deleting task with ID:", taskIdToRemove);
+    try {
+      await deleteDoc(doc(db, "todos", String(taskIdToRemove)));
+      setAllTasks((prev) => {
+        const updatedTasks = prev.filter((task) => task.id !== taskIdToRemove);
+        return updatedTasks;
+      });
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };  
 
   const provider = new GoogleAuthProvider();
   const handleGogLogin = async (event) => {
