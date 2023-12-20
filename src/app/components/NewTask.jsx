@@ -16,9 +16,16 @@ export default function NewTask({ user, newTask, handleChange, handleSubmit }) {
     <div className="py-5 font-kalam">
     <form onSubmit={handleFormSubmit}>
       <input
+        className="border-gray-300 border-2 text-base mb-1"
+        name="category"
+        placeholder="Enter category"
+        value={newTask.category || ""}
+        onChange={handleChange}
+      />
+      <input
         className="border-gray-300 border-2 text-base"
         name="title"
-        placeholder="New task"
+        placeholder="Enter task"
         value={newTask.title || ""}
         onChange={handleChange}
       />

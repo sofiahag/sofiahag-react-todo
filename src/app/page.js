@@ -37,7 +37,7 @@ export default function Home() {
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    setNewTask((prev) => ({ ...prev, id: Date.now(), [name]: value }));
+    setNewTask((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (event) => {
@@ -49,6 +49,7 @@ export default function Home() {
         user: uid,
         title: newTask.title,
         description: newTask.description,
+        category: newTask.category,
         timestamp: serverTimestamp()
       });
       const newTaskData = { id: docRef.id, ...newTask };
