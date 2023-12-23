@@ -6,8 +6,7 @@ export default function NewTask({ user, newTask, handleChange, handleSubmit }) {
     //console.log('Event object:', event);
     event.preventDefault();
     if (!user) {
-      alert("Please log in to add a task");
-      return;
+      alert("Please log in to save a task");
     }
     handleSubmit(event);
   };

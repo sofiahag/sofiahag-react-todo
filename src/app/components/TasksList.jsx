@@ -38,7 +38,6 @@ export default function TasksList({ allTasks, handleDelete }) {
             )}
           </li>
         );
-
       })}
     </ul>
   );

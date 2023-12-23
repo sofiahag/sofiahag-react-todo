@@ -42,34 +42,59 @@ export default function Home() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!newTask.title || !user) return;
-    const uid = user.uid;
-    try {
-      const docRef = await addDoc(collection(db, 'todos'), {
-        user: uid,
-        title: newTask.title,
-        description: newTask.description,
-        category: newTask.category,
-        timestamp: serverTimestamp()
-      });
-      const newTaskData = { id: docRef.id, ...newTask };
-      setAllTasks((prev) => [newTaskData, ...prev]);
-      setNewTask({});
-    } catch (error) {
-      console.error("Error adding task:", error);
+    if (user){
+      //if (!newTask.title || !user) return;
+      const uid = user.uid;
+      try {
+        const docRef = await addDoc(collection(db, 'todos'), {
+          user: uid,
+          title: newTask.title,
+          description: newTask.description,
+          category: newTask.category,
+          timestamp: serverTimestamp()
+        });
+        const newTaskData = { id: docRef.id, ...newTask };
+        setAllTasks((prev) => [newTaskData, ...prev]);
+        setNewTask({});
+      } catch (error) {
+        console.error("Error adding task:", error);
+      }
+    }else{
+      try {
+        const tempRef = {
+          user: 'temp_user',
+          title: newTask.title,
+          description: newTask.description,
+          category: newTask.category,
+          timestamp: serverTimestamp()
+        }
+        const tempId = Date.now().toString();
+        const newTaskData = { id: tempId, ...newTask };
+        setAllTasks((prev) => [newTaskData, ...prev]);
+        setNewTask({});
+      } catch (error) {
+        console.error("Error adding task:", error);
+      }
     }
   };
 
   const handleDelete = async (taskIdToRemove) => {
     console.log("Deleting task with ID:", taskIdToRemove);
-    try {
-      await deleteDoc(doc(db, "todos", String(taskIdToRemove)));
+    if (user){
+      try {
+        await deleteDoc(doc(db, "todos", String(taskIdToRemove)));
+        setAllTasks((prev) => {
+          const updatedTasks = prev.filter((task) => task.id !== taskIdToRemove);
+          return updatedTasks;
+        });
+      } catch (error) {
+        console.error("Error deleting task:", error);
+      }
+    }else{
       setAllTasks((prev) => {
         const updatedTasks = prev.filter((task) => task.id !== taskIdToRemove);
         return updatedTasks;
       });
-    } catch (error) {
-      console.error("Error deleting task:", error);
     }
   };  
 
@@ -148,7 +173,7 @@ export default function Home() {
           handleChange={handleChange}
           handleSubmit={(event) => handleSubmit(event)}
         />
-        {user && allTasks.length > 0 && <TasksList allTasks={allTasks} handleDelete={handleDelete} />}
+        {allTasks.length > 0 && <TasksList allTasks={allTasks} handleDelete={handleDelete} />}
       </div>
     </main>
   );
