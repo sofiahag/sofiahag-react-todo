@@ -3,7 +3,6 @@ import React from "react";
 export default function NewTask({ user, newTask, handleChange, handleSubmit }) {
 
   const handleFormSubmit = (event) => {
-    //console.log('Event object:', event);
     event.preventDefault();
     if (!user) {
       alert("Please log in to save a task");

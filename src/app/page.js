@@ -12,9 +12,9 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 
 import Image from "next/image";
+import Icon from "./assets/notepad.png";
 
 const Q = query(collection(db, "todos"), orderBy("timestamp", "desc"));
-
 
 export default function Home() {
 
@@ -23,15 +23,41 @@ export default function Home() {
   const [reg, setReg] = useState(false);
   const [log, setLog] = useState(false);
   const [allTasks, setAllTasks] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [localTasks, setLocalTasks] = useState([]);
+  const [localCategories, setLocalCategories] = useState([]);
 
 
-  const fetchTasks = async (user) => {
+  const fetchTasks = async (user, category) => {
+    if (user) {
+      const uid = user.uid;
+      let tasksQuery = query(collection(db, "todos"), where("user", "==", uid));
+      if (category) {
+        tasksQuery = query(collection(db, "todos"), where("user", "==", uid), where("category", "==", category));
+      }
+      const querySnapshot = await getDocs(tasksQuery);
+      const tasks = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setAllTasks(tasks);
+    }
+  };  
+  const fetchCategories = async (user) => {
     if (user) {
       const uid = user.uid;
       const tasksQuery = query(collection(db, "todos"), where("user", "==", uid));
       const querySnapshot = await getDocs(tasksQuery);
-      const tasks = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setAllTasks(tasks);
+      const categoriesSet = new Set();
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.category) {
+          categoriesSet.add(data.category);
+        }
+      });
+      setCategories(Array.from(categoriesSet));
+    } else {
+      if (localCategories.length > 0) {
+        setCategories(localCategories);
+      }
     }
   };  
 
@@ -43,7 +69,6 @@ export default function Home() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (user){
-      //if (!newTask.title || !user) return;
       const uid = user.uid;
       try {
         const docRef = await addDoc(collection(db, 'todos'), {
@@ -61,16 +86,12 @@ export default function Home() {
       }
     }else{
       try {
-        const tempRef = {
-          user: 'temp_user',
-          title: newTask.title,
-          description: newTask.description,
-          category: newTask.category,
-          timestamp: serverTimestamp()
-        }
         const tempId = Date.now().toString();
         const newTaskData = { id: tempId, ...newTask };
         setAllTasks((prev) => [newTaskData, ...prev]);
+        if (newTask.category && !localCategories.includes(newTask.category)) {
+          setLocalCategories((prev) => [...prev, newTask.category]);
+        }
         setNewTask({});
       } catch (error) {
         console.error("Error adding task:", error);
@@ -80,7 +101,7 @@ export default function Home() {
 
   const handleDelete = async (taskIdToRemove) => {
     console.log("Deleting task with ID:", taskIdToRemove);
-    if (user){
+    if (user) {
       try {
         await deleteDoc(doc(db, "todos", String(taskIdToRemove)));
         setAllTasks((prev) => {
@@ -90,13 +111,28 @@ export default function Home() {
       } catch (error) {
         console.error("Error deleting task:", error);
       }
-    }else{
+    } else {
       setAllTasks((prev) => {
         const updatedTasks = prev.filter((task) => task.id !== taskIdToRemove);
         return updatedTasks;
       });
+      try {
+        const tempId = Date.now().toString();
+        const newTaskData = { id: tempId, ...newTask };
+        setAllTasks((prev) => [newTaskData, ...prev]);
+        if (newTask.category && !localCategories.includes(newTask.category)) {
+          setLocalCategories((prev) => [...prev, newTask.category]);
+        }
+        const deletedTask = allTasks.find((task) => task.id === taskIdToRemove);
+        if (deletedTask && deletedTask.category && localCategories.includes(deletedTask.category)) {
+          setLocalCategories((prev) => prev.filter((category) => category !== deletedTask.category));
+        }
+        setNewTask({});
+      } catch (error) {
+        console.error("Error adding task:", error);
+      }
     }
-  };  
+  };
 
   const provider = new GoogleAuthProvider();
   const handleGogLogin = async (event) => {
@@ -109,19 +145,22 @@ export default function Home() {
         if (docs.docs.length === 0) {
           await addDoc(collection(db, "users"), {
               uid: user.uid,
-              name: 'Name Will Appear',
+              name: "Name Will Appear",
               authProvider: "google",
               email: user.email,
           });
       }
-        //console.log("Google sign-in successful", user);
     } catch (error) {
         console.error("Google sign-in error", error);
     }
-};
+  };
 
-  const handleLogout = () => {            
+  const handleLogout = () => {
     signOut(auth).then(() => {
+      setUser(null);
+      setAllTasks([]);
+      setLocalTasks([]);
+      setSelectedCategory("");
       alert("Logged out successfully!");
     }).catch((error) => {
       console.error(error);
@@ -141,11 +180,9 @@ export default function Home() {
       if (authUser) {
         setUser(authUser);
         fetchTasks(authUser);
-        const uid = authUser.uid;
-        //console.log("uid", uid);
+        fetchCategories(authUser);
       } else {
         setUser(null);
-        //console.log("User is logged out");
       }
     });
     return () => unsubscribe();
@@ -155,13 +192,16 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center">
       <nav className="bg-black p-4 w-full">
         <div className="container mx-auto flex justify-normal items-center">
-          <button onClick={toggleReg} className="text-pink-100">Register</button>
+          <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon"></Image>
+          <button onClick={toggleReg} className="text-pink-100 ml-10 max-sm:ml-2 max-sm:text-xs">REGISTER</button>
+          <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon" className="ml-10 max-sm:ml-2"></Image>
           {reg ? <Register newTask={newTask} setAllTasks={setAllTasks} toggle={toggleReg} /> : null}
-          <button onClick={toggleLog} className="text-purple-100 ml-24 max-sm:ml-3">Login</button>
+          <button onClick={toggleLog} className="text-purple-100 ml-10 max-sm:ml-2 max-sm:text-xs">LOGIN</button>
+          <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon" className="ml-10 max-sm:ml-2"></Image>
           {log ? <Login toggle={toggleLog} /> : null}
-          <button onClick={handleGogLogin} className="text-purple-100 ml-24 max-sm:ml-3">Login with Google</button>
+          <button onClick={handleGogLogin} className="text-purple-100 ml-10 max-sm:ml-2 max-sm:text-xs">Login with Google</button>
           <div className="ml-auto">
-            <button onClick={handleLogout} className="text-sky-100">Logout</button>
+            <button onClick={handleLogout} className="text-sky-100 max-sm:text-xs">LOGOUT</button>
           </div>
         </div>
       </nav>
@@ -173,6 +213,27 @@ export default function Home() {
           handleChange={handleChange}
           handleSubmit={(event) => handleSubmit(event)}
         />
+        <select
+          className="border-gray-300 border-2 text-base mb-2 p-1"
+          value={selectedCategory}
+          onChange={(e) => {
+            setSelectedCategory(e.target.value);
+            fetchTasks(user, e.target.value);
+          }}
+        >
+        <option value="">All categories</option>
+        {user
+          ? categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))
+        : localCategories.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
+        </select>
         {allTasks.length > 0 && <TasksList allTasks={allTasks} handleDelete={handleDelete} />}
       </div>
     </main>
