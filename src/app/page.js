@@ -28,7 +28,6 @@ export default function Home() {
   const [localTasks, setLocalTasks] = useState([]);
   const [localCategories, setLocalCategories] = useState([]);
 
-
   const fetchTasks = async (user, category) => {
     if (user) {
       const uid = user.uid;
@@ -190,23 +189,22 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <nav className="bg-black p-4 w-full">
-        <div className="container mx-auto flex justify-normal items-center">
+      <nav className="bg-light-brown p-4 w-full mb-5">
+        <div className="container mx-auto flex justify-normal items-center text-black">
           <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon"></Image>
-          <button onClick={toggleReg} className="text-pink-100 ml-10 max-sm:ml-2 max-sm:text-xs">REGISTER</button>
+          <button onClick={toggleReg} className="ml-10 max-sm:ml-2 max-sm:text-xs">REGISTER</button>
           <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon" className="ml-10 max-sm:ml-2"></Image>
           {reg ? <Register newTask={newTask} setAllTasks={setAllTasks} toggle={toggleReg} /> : null}
-          <button onClick={toggleLog} className="text-purple-100 ml-10 max-sm:ml-2 max-sm:text-xs">LOGIN</button>
+          <button onClick={toggleLog} className=" ml-10 max-sm:ml-2 max-sm:text-xs">LOGIN</button>
           <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon" className="ml-10 max-sm:ml-2"></Image>
           {log ? <Login toggle={toggleLog} /> : null}
-          <button onClick={handleGogLogin} className="text-purple-100 ml-10 max-sm:ml-2 max-sm:text-xs">Login with Google</button>
+          <button onClick={handleGogLogin} className="ml-10 max-sm:ml-2 max-sm:text-xs">Login with Google</button>
           <div className="ml-auto">
-            <button onClick={handleLogout} className="text-sky-100 max-sm:text-xs">LOGOUT</button>
+            <button onClick={handleLogout} className="max-sm:text-xs">LOGOUT</button>
           </div>
         </div>
       </nav>
-      <h1 className="text-3xl my-6 py-5">TASKS</h1>
-      <div className="max-w-2xl lg:w-1/2 md:w-2/3 max-sm:w-64 items-center text-sm">
+      <div className="md:w-5/6 max-sm:w-64 items-center text-sm mt-3">
         <NewTask
           user={user}
           newTask={newTask}
@@ -214,7 +212,7 @@ export default function Home() {
           handleSubmit={(event) => handleSubmit(event)}
         />
         <select
-          className="border-gray-300 border-2 text-base mb-2 p-1"
+          className="border-gray-300 border-2 text-base mb-4 p-1"
           value={selectedCategory}
           onChange={(e) => {
             setSelectedCategory(e.target.value);
@@ -234,7 +232,9 @@ export default function Home() {
           </option>
         ))}
         </select>
-        {allTasks.length > 0 && <TasksList allTasks={allTasks} handleDelete={handleDelete} />}
+        <div className="mb-5">
+          {allTasks.length > 0 && <TasksList allTasks={allTasks} handleDelete={handleDelete} />}
+        </div>
       </div>
     </main>
   );

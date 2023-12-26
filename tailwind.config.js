@@ -17,8 +17,14 @@ module.exports = {
       },
       spacing: {
         '6': '48px',
-      }
+      },
     },
+    colors: {
+      'light-brown': '#d4bfa5',
+      'white': '#ffffff',
+      'pink-200': '#fbcfe8',
+      'sky-200': '#bae6fd',
+    }
   },
   plugins: [],
 }
