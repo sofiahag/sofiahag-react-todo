@@ -13,6 +13,7 @@ import Login from "./components/Login";
 
 import Image from "next/image";
 import Icon from "./assets/notepad.png";
+import { ColorRing } from "react-loader-spinner";
 
 const Q = query(collection(db, "todos"), orderBy("timestamp", "desc"));
 
@@ -27,6 +28,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [localTasks, setLocalTasks] = useState([]);
   const [localCategories, setLocalCategories] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchTasks = async (user, category) => {
     if (user) {
@@ -187,6 +189,10 @@ export default function Home() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => { 
+    setIsLoaded(isLoaded => true) 
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center">
       <nav className="bg-light-brown p-4 w-full mb-5">
@@ -233,7 +239,14 @@ export default function Home() {
         ))}
         </select>
         <div className="mb-5">
-          {allTasks.length > 0 && <TasksList allTasks={allTasks} handleDelete={handleDelete} />}
+          {isLoaded ? <TasksList allTasks={allTasks} handleDelete={handleDelete} /> : 
+            <ColorRing 
+              colors={["#FFEF8A", "#BBF7D0", "#BFDBFE", "#DDD6FE", "#FBCFE8"]} 
+              height={"80"} 
+              width={"80"}
+              ariaLabel="color-ring-loading"
+              wrapperClass="color-ring-wrapper"
+            />}
         </div>
       </div>
     </main>

@@ -36,10 +36,10 @@ const getRandomColorHex = (category) => {
 export default function TasksList({ allTasks, handleDelete }) {
 
   if (allTasks.length === 0) {
-    return <p>No tasks yet</p>;
+    return <p className="text-white">No tasks yet</p>;
   }
 
-  const numColumns = Math.min(4, Math.max(2, allTasks.length));
+  const numColumns = Math.min(4, Math.max(1, allTasks.length));
 
   return (
     <ul className={`grid grid-cols-1 md:grid-cols-${numColumns}`}>
@@ -56,7 +56,9 @@ export default function TasksList({ allTasks, handleDelete }) {
           <li className={`text-base m-2`} key={key} style={{ backgroundColor: listColor }}>
             <div style={{ backgroundColor: divColor }}>
               <h2 className="text-lg break-all px-3 py-3 mr-4">{title}</h2>
+              <hr></hr>
               <p className="text-base px-3 py-1 mr-4">Category: {category}</p>
+              <hr></hr>
               <button className="bg-yellow-50" onClick={() => handleDelete(id)}>X</button>
             </div>
             {!description ? null : (

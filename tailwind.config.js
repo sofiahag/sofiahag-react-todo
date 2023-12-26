@@ -24,6 +24,7 @@ module.exports = {
       'white': '#ffffff',
       'pink-200': '#fbcfe8',
       'sky-200': '#bae6fd',
+      'gray-300': '#d1d5db'
     }
   },
   plugins: [],
