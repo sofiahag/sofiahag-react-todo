@@ -1,7 +1,7 @@
 # :spiral_notepad: My React Task App
 
-Simple task app built with Next and Tailwind CSS. More to come!
+Task app built with Next, Tailwind CSS, and Firebase. 
 
-Favicon created by Pixel perfect, Flaticon.
+Icons by Flaticon.
 
 https://sofiahag-next-todo.netlify.app/
