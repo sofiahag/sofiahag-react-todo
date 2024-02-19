@@ -13,7 +13,7 @@ export default function NewTask({ user, newTask, handleChange, handleSubmit }) {
   return (
     <div className="py-5 font-kalam flex justify-center items-center w-full">
       <form onSubmit={handleFormSubmit} className="md:w-2/5 max-sm:w-full">
-        <label htmlFor="category" className="text-white">Add a category of task:</label>
+        <label htmlFor="category" className="text-light-brown">Add a category of task:</label>
         <input
           className="text-base mb-1"
           name="category"
@@ -22,7 +22,7 @@ export default function NewTask({ user, newTask, handleChange, handleSubmit }) {
           onChange={handleChange}
           id="category"
         />
-        <label htmlFor="task" className="text-white">Add task:</label>
+        <label htmlFor="task" className="text-light-brown">Add task:</label>
         <input
           className="text-base"
           name="title"

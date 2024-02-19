@@ -2,6 +2,7 @@ import './globals.css'
 
 import { Kalam } from 'next/font/google'
 
+import { Montserrat } from 'next/font/google'
 
 export const metadata = {
   title: 'Todo React App',
@@ -11,10 +12,12 @@ export const metadata = {
   }
 }
 
+const montserrat = Montserrat({ subsets: ['latin'], weight: ['400'] })
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="text-sofia">{children}</body>
+      <body className={montserrat.className}>{children}</body>
     </html>
   )
 }
