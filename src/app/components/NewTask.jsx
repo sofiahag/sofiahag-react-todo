@@ -11,18 +11,17 @@ export default function NewTask({ user, newTask, handleChange, handleSubmit }) {
   };
 
   return (
-    <div className="py-5 font-kalam flex justify-center items-center w-full">
+    <div className="py-5 lg:mt-[50px] md:mt-[60px] font-kalam flex justify-center items-center w-full">
       <form onSubmit={handleFormSubmit} className="md:w-2/5 max-sm:w-full">
-        <label htmlFor="category" className="text-light-brown">Add a category of task:</label>
+      <h2 className="mb-3 text-white text-lg">Enter category and task:</h2>
         <input
-          className="text-base mb-1"
+          className="text-base mb-3"
           name="category"
           placeholder="Enter category"
           value={newTask.category || ""}
           onChange={handleChange}
           id="category"
         />
-        <label htmlFor="task" className="text-light-brown">Add task:</label>
         <input
           className="text-base"
           name="title"

@@ -194,19 +194,30 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <nav className="bg-light-brown p-4 w-full mb-5">
+    <main className="flex min-h-screen flex-col items-center bg-dark-brown">
+      <nav className="bg-light-brown py-4 w-full mb-5">
         <div className="container mx-auto flex justify-normal items-center text-black">
-          <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon"></Image>
-          <button onClick={toggleReg} className="ml-10 max-sm:ml-2 max-sm:text-xs">REGISTER</button>
+          <button onClick={toggleReg} className="ml-10 max-sm:ml-0 max-sm:text-[10px] 
+              bg-light-blue text-black font-semibold hover:bg-light-mint
+              hover:opacity-75 py-1 px-3 border border-black rounded-2xl">REGISTER
+          </button>
           <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon" className="ml-10 max-sm:ml-2"></Image>
           {reg ? <Register newTask={newTask} setAllTasks={setAllTasks} toggle={toggleReg} /> : null}
-          <button onClick={toggleLog} className=" ml-10 max-sm:ml-2 max-sm:text-xs">LOGIN</button>
+          <button onClick={toggleLog} className="ml-10 max-sm:ml-2 max-sm:text-[10px] bg-light-blue 
+              text-black font-semibold hover:opacity-75 py-1 px-3 border border-black 
+              rounded-2xl hover:bg-light-mint">LOGIN
+          </button>
           <Image src={Icon} width={30} height={30} alt="Notepad icon by Freepik- Flaticon" className="ml-10 max-sm:ml-2"></Image>
           {log ? <Login toggle={toggleLog} /> : null}
-          <button onClick={handleGogLogin} className="ml-10 max-sm:ml-2 max-sm:text-xs">Login with Google</button>
-          <div className="ml-auto">
-            <button onClick={handleLogout} className="max-sm:text-xs">LOGOUT</button>
+          <button onClick={handleGogLogin} className="ml-10 max-sm:ml-2 max-sm:text-[10px] bg-light-blue 
+              text-black font-semibold hover:opacity-75 py-1 px-3 max-sm:px-0 border border-black 
+              rounded-2xl hover:bg-light-mint">Login with Google
+          </button>
+          <div className="ml-auto max-sm:ml-2 md:mr-[30px]">
+              <button onClick={handleLogout} className="max-sm:text-[10px] bg-light-pink-post-it
+                  hover:bg-light-mint text-black font-semibold hover:opacity-75 py-1 px-3 border border-black 
+                  rounded-2xl">LOGOUT
+              </button>
           </div>
         </div>
       </nav>
@@ -238,7 +249,7 @@ export default function Home() {
           </option>
         ))}
         </select>
-        <div className="mb-5">
+        <div className="mt-5">
           {isLoaded ? <TasksList allTasks={allTasks} handleDelete={handleDelete} /> : 
             <ColorRing 
               colors={["#FFEF8A", "#BBF7D0", "#BFDBFE", "#DDD6FE", "#FBCFE8"]} 

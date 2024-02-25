@@ -4,35 +4,6 @@ const generateFallbackKey = () => {
   return Date.now().toString();
 };
 
-const colorHexMap = {
-  yellow: ["#FEF9C3", "#FFEF8A"],
-  lime: ["#ECFCCB", "#D9F99D"],
-  green: ["#DCFCE7", "#BBF7D0"],
-  teal: ["#CCFBF1", "#99F6E4"],
-  cyan: ["#CFFAFE", "#A5F3FC"],
-  indigo: ["#E0E7FF", "#C7D2FE"],
-  blue: ["#DBE9FE", "#BFDBFE"],
-  violet: ["#EDE9FE", "#DDD6FE"],
-  fuchsia: ["#FAE8FF", "#F5D0FE"],
-  pink: ["#FBE7F3", "#FBCFE8"],
-  rose: ["#FFE4E6", "#FECDD3"]
-};
-
-
-const categoryColorMap = {};
-const getRandomColorHex = (category) => {
-  if (categoryColorMap[category]) {
-    return categoryColorMap[category];
-  }
-  if (colorHexMap[category]) {
-    return colorHexMap[category];
-  }
-  const categories = Object.keys(colorHexMap);
-  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-  return colorHexMap[randomCategory];
-};
-
-
 export default function TasksList({ allTasks, handleDelete }) {
 
   if (allTasks.length === 0) {
@@ -49,13 +20,13 @@ export default function TasksList({ allTasks, handleDelete }) {
           console.warn('Task skipped due to missing id:', { title, description });
           return null;
         }
-        const [listColor, divColor] = getRandomColorHex(category);
-        categoryColorMap[category] = [listColor, divColor];
 
         return (
-          <li className={`text-base m-2`} key={key} style={{ backgroundColor: listColor }}>
-            <div style={{ backgroundColor: divColor }}>
+          <li className="text-base m-2 bg-light-pink-post-it mt-5" key={key}>
+            <div className="bg-pink-post-it">
               <h2 className="text-lg break-all px-3 py-3 mr-4">{title}</h2>
+            </div>
+            <div className="bg-pink-cat-post-it">
               <hr></hr>
               <p className="text-base px-3 py-1 mr-4">Category: {category}</p>
               <hr></hr>

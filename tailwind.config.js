@@ -20,11 +20,17 @@ module.exports = {
       },
     },
     colors: {
-      'light-brown': '#d4bfa5',
+      'light-brown': '#e6dacb',
+      'dark-brown': '#4d3f33',
       'white': '#ffffff',
       'pink-200': '#fbcfe8',
       'sky-200': '#bae6fd',
-      'gray-300': '#d1d5db'
+      'gray-300': '#d1d5db',
+      'pink-post-it': '#f6a6c3',
+      'pink-cat-post-it': '#f7bad1',
+      'light-pink-post-it': '#fad1e0',
+      'light-blue': '#cce6ff',
+      'light-mint': '#ccfff5'
     }
   },
   plugins: [],
