@@ -28,7 +28,7 @@ module.exports = {
       'gray-300': '#d1d5db',
       'pink-post-it': '#f6a6c3',
       'pink-cat-post-it': '#f7bad1',
-      'light-pink-post-it': '#fad1e0',
+      'light-pink-post-it': '#F6A6C2',
       'light-blue': '#cce6ff',
       'light-mint': '#ccfff5'
     }

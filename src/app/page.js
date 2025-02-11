@@ -211,7 +211,7 @@ export default function Home() {
           {log ? <Login toggle={toggleLog} /> : null}
           <button onClick={handleGogLogin} className="ml-10 max-sm:ml-2 max-sm:text-[10px] bg-light-blue 
               text-black font-semibold hover:opacity-75 py-1 px-3 max-sm:px-0 border border-black 
-              rounded-2xl hover:bg-light-mint">Login with Google
+              rounded-2xl hover:bg-light-mint">GOOGLE LOGIN
           </button>
           <div className="ml-auto max-sm:ml-2 md:mr-[30px]">
               <button onClick={handleLogout} className="max-sm:text-[10px] bg-light-pink-post-it
